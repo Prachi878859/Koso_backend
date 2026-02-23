@@ -1,0 +1,21 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+
+# Android / Expo
+android/app/debug.keystore
+android/.gradle/
+android/build/
+android/app/build/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,60 @@
+{
+  "expo": {
+    "name": "Leakage",
+    "slug": "leakage",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "leakage",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": false,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.leakage.app"
+    },
+    "android": {
+      "package": "com.leakage.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/kosoimage.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/koso.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "resizeMode": "contain",
+          "backgroundColor": "#000000"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "gradleVersion": "8.6",
+            "androidGradlePluginVersion": "8.3.2",
+            "usesCleartextTraffic": true,
+            "manifestPlaceholders": {
+              "expo.modules.filesystem.FileSystemFileProvider_authorities": "${applicationId}.provider"
+            }
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c7185da6-f161-42db-9eb5-d547c73056f5"
+      }
+    }
+  }
+}
