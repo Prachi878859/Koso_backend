@@ -87,6 +87,8 @@ const powerStationController = {
   sell_price_per_mwh
 } = req.body;
 
+console.log("BODY =>", req.body);
+
       // Validate required fields
       if (!power_station_name) {
         return res.status(400).json({

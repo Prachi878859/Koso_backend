@@ -25,11 +25,11 @@ if (!fs.existsSync(uploadsDir)) {
 
 // CORS Configuration
 const allowedOrigins = [
-  "http://192.168.1.13:5173", 
-  "http://192.168.1.13:5174", 
-  "http://192.168.1.2:3000",
+  "http://192.168.1.7:5173", 
+  "http://192.168.1.7:5174", 
+  "http://192.168.1.7:3000",
   "http://localhost:8081",
-  "http://192.168.1.13:19006"  // Added for Expo
+  "http://192.168.1.7:19006"  // Added for Expo
 ];
 
 app.use(cors({
