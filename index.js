@@ -25,7 +25,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 // CORS Configuration
 const allowedOrigins = [
-  "http://192.168.1.7:5173", 
+  "http://localhost:5173", 
   "http://192.168.1.7:5174", 
   "http://192.168.1.7:3000",
   "http://localhost:8081",
