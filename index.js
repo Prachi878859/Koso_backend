@@ -25,11 +25,8 @@ if (!fs.existsSync(uploadsDir)) {
 
 // CORS Configuration
 const allowedOrigins = [
-  "http://localhost:5173", 
-  "http://192.168.1.7:5174", 
-  "http://192.168.1.7:3000",
-  "http://localhost:8081",
-  "http://192.168.1.7:19006"  // Added for Expo
+  "https://koso.sparklerstech.com", 
+  "http://localhost:5173",
 ];
 
 app.use(cors({
@@ -65,17 +62,35 @@ app.use(morgan('dev'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Root route
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.json({
     message: 'Welcome to KOSO Application API',
     version: '1.0.0',
     status: 'running',
+    backendStatus: 'connected successfully', // Added this line
     timestamp: new Date().toISOString(),
     endpoints: {
       admin: '/api/admins',
       users: '/api/users',
       power_stations: '/api/power-stations',
-      health: '/health'
+      health: '/health',
+      status: '/api/status'
+    }
+  });
+});
+
+// New endpoint for backend connection status
+app.get('/api/status', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Backend connected successfully',
+    timestamp: new Date().toISOString(),
+    serverInfo: {
+      uptime: process.uptime(),
+      nodeVersion: process.version,
+      platform: process.platform,
+      memory: process.memoryUsage(),
+      database: db ? 'connected' : 'disconnected'
     }
   });
 });
@@ -89,9 +104,10 @@ app.use('/api/power-stations', powerStationRoutes);
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
+    message: 'Backend connected successfully', // Added this line
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    database: 'connected', // You can add actual DB check here
+    database: 'connected',
     memory: process.memoryUsage()
   });
 });
@@ -166,6 +182,7 @@ app.use((req, res) => {
     availableRoutes: [
       'GET /',
       'GET /health',
+      'GET /api/status',
       'GET /api/admins',
       'GET /api/users',
       'GET /api/power-stations'
@@ -177,27 +194,40 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || 'localhost';
 
+// Variable to track if server has started
+let serverStarted = false;
+
 // Start Server
 const server = app.listen(PORT, HOST, () => {
-  console.log('\n' + '='.repeat(60));
-  console.log('🚀 KOSO APPLICATION BACKEND SERVER');
-  console.log('='.repeat(60));
-  
-  console.log(`✅ Server running on: http://${HOST}:${PORT}`);
-  console.log(`📡 API Base URL: http://${HOST}:${PORT}/api`);
-  console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`📅 Started at: ${new Date().toLocaleString()}`);
-  console.log(`📊 Node Version: ${process.version}`);
-  console.log(`💾 Platform: ${process.platform}`);
-  console.log('='.repeat(60) + '\n');
-  
-  console.log('📋 Available Endpoints:');
-  console.log('   GET  /               - API Information');
-  console.log('   GET  /health         - Health Check');
-  console.log('   GET  /api/admins     - Admin Routes');
-  console.log('   GET  /api/users      - User Routes');
-  console.log('   GET  /api/power-stations - Power Station Routes');
-  console.log('');
+  // Check if server already started to prevent multiple logs
+  if (!serverStarted) {
+    serverStarted = true;
+    
+    console.log('\n' + '='.repeat(60));
+    console.log('🚀 KOSO APPLICATION BACKEND SERVER');
+    console.log('='.repeat(60));
+    
+    // THIS IS THE MAIN MESSAGE YOU WANT
+    console.log('✅✅✅ Backend connected successfully! ✅✅✅');
+    console.log('='.repeat(60));
+    
+    console.log(`✅ Server running on: http://${HOST}:${PORT}`);
+    console.log(`📡 API Base URL: http://${HOST}:${PORT}/api`);
+    console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`📅 Started at: ${new Date().toLocaleString()}`);
+    console.log(`📊 Node Version: ${process.version}`);
+    console.log(`💾 Platform: ${process.platform}`);
+    console.log('='.repeat(60) + '\n');
+    
+    console.log('📋 Available Endpoints:');
+    console.log('   GET  /               - API Information');
+    console.log('   GET  /health         - Health Check');
+    console.log('   GET  /api/status     - Backend Connection Status');
+    console.log('   GET  /api/admins     - Admin Routes');
+    console.log('   GET  /api/users      - User Routes');
+    console.log('   GET  /api/power-stations - Power Station Routes');
+    console.log('');
+  }
 });
 
 // Graceful Shutdown
