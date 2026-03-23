@@ -1,4 +1,6 @@
+
 require('dotenv').config();
+console.log('SMTP_USER:', process.env.SMTP_USER);
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -27,6 +29,7 @@ if (!fs.existsSync(uploadsDir)) {
 const allowedOrigins = [
   "https://koso.sparklerstech.com", 
   "http://localhost:5173",
+  "http://localhost:8081"
 ];
 
 app.use(cors({
@@ -63,6 +66,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Root route
 app.get('/api', (req, res) => {
+  console.log('SMTP_USER:', process.env.SMTP_USER);
   res.json({
     message: 'Welcome to KOSO Application API',
     version: '1.0.0',
@@ -76,6 +80,7 @@ app.get('/api', (req, res) => {
       health: '/health',
       status: '/api/status'
     }
+    
   });
 });
 

@@ -107,11 +107,7 @@ const sendCredentialsEmail = async (toEmail, name, password) => {
                 </ul>
               </div>
               
-              <div style="text-align: center;">
-                <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}" class="btn">
-                  🔑 Login to Your Account
-                </a>
-              </div>
+              
               
               <p style="margin-top: 25px; font-size: 14px; color: #666; text-align: center;">
                 If you didn't request this account, please ignore this email.
@@ -392,6 +388,156 @@ If you have any questions, please contact our support team.
 
 // config/emailService.js - Add this function
 
+// const resendCredentialsEmail = async (toEmail, name, password) => {
+//   try {
+//     console.log(`📤 Preparing to resend credentials email to: ${toEmail}`);
+    
+//     if (!toEmail || !name || !password) {
+//       console.error("❌ Missing required parameters for resend email");
+//       return false;
+//     }
+
+//     // Path to your logo image
+//     const logoPath = path.join(__dirname, '../assets/images/koso-logo.png');
+    
+//     // Read the image file
+//     const logoBuffer = fs.readFileSync(logoPath);
+
+//     // Email content with CID reference
+//     const mailOptions = {
+//       from: `"KOSO Application" <${process.env.SMTP_USER || 'companytest128@gmail.com'}>`,
+//       to: toEmail,
+//       subject: 'KOSO Application - Your Account Credentials (Resent)',
+//       attachments: [
+//         {
+//           filename: 'logo.png',
+//           content: logoBuffer,
+//           cid: 'companylogo' // Same CID used in img src
+//         }
+//       ],
+//       html: `
+//         <!DOCTYPE html>
+//         <html>
+//         <head>
+//           <style>
+//             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+//             .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
+//             .header { background: linear-gradient(to right, rgb(255, 97, 97), #FF4D57); color: white; padding: 30px 20px; border-radius: 10px 10px 0 0; text-align: center; }
+//             .logo-container { margin-bottom: 20px; }
+//             .logo { max-width: 150px; height: auto; display: inline-block; background: white; padding: 10px; border-radius: 10px; }
+//             .header h1 { margin: 10px 0 5px; font-size: 28px; }
+//             .header p { margin: 0; opacity: 0.9; }
+//             .content { padding: 30px 20px; background: #ffffff; }
+//             .credentials { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #FF4D57; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+//             .btn { display: inline-block; padding: 12px 30px; background: #FF4D57; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; font-weight: bold; }
+//             .btn:hover { background: #e0444d; }
+//             .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px; text-align: center; }
+//             .highlight { color: #FF4D57; font-weight: bold; font-size: 16px; }
+//             .warning { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 8px; margin: 20px 0; }
+//             .security-box { background: #e8f4fd; border: 1px solid #b8e1ff; padding: 15px; border-radius: 8px; margin-top: 20px; }
+//           </style>
+//         </head>
+//         <body>
+//           <div class="container">
+//             <div class="header">
+//               <div class="logo-container">
+//                 <!-- Image referenced by CID -->
+//                 <img src="cid:companylogo" alt="KOSO Application Logo" class="logo" />
+//               </div>
+//               <h1>KOSO Application</h1>
+//               <p>Your Account Credentials (Resent)</p>
+//             </div>
+            
+//             <div class="content">
+//               <h2 style="color: #333; margin-top: 0;">Hello ${name},</h2>
+//               <p style="font-size: 16px;">We are resending your account credentials as requested.</p>
+              
+//               <div class="warning">
+//                 <p><strong>⚠️ Security Alert:</strong> This email contains your login credentials. Please keep them secure and do not share them with anyone.</p>
+//               </div>
+              
+//               <div class="credentials">
+//                 <h3 style="margin-top: 0; color: #FF4D57;">🔐 Your Login Credentials</h3>
+//                 <table style="width: 100%; border-collapse: collapse;">
+//                   <tr>
+//                     <td style="padding: 10px 0; width: 100px;"><strong>Email:</strong></td>
+//                     <td style="padding: 10px 0;"><span class="highlight">${toEmail}</span></td>
+//                   </tr>
+//                   <tr>
+//                     <td style="padding: 10px 0;"><strong>Password:</strong></td>
+//                     <td style="padding: 10px 0;"><span class="highlight">${password}</span></td>
+//                   </tr>
+//                 </table>
+//               </div>
+              
+//               <div class="security-box">
+//                 <h4 style="margin-top: 0; color: #0066cc;">📋 Important Security Notes:</h4>
+//                 <ul>
+                 
+//                   <li>Never share your credentials with anyone</li>
+//                   <li>Enable two-factor authentication for additional security</li>
+//                   <li>This email was sent at your request on ${new Date().toLocaleString()}</li>
+//                 </ul>
+//               </div>
+              
+            
+              
+//               <p style="margin-top: 25px; font-size: 14px; color: #666; text-align: center;">
+//                 If you didn't request these credentials, please contact our support team immediately.
+//               </p>
+//             </div>
+            
+//             <div class="footer">
+//               <p><strong>Requested on:</strong> ${new Date().toLocaleString()}</p>
+//               <p>&copy; ${new Date().getFullYear()} KOSO Application. All rights reserved.</p>
+//               <p style="margin-top: 10px; font-size: 11px;">This is an automated message, please do not reply to this email.</p>
+//             </div>
+//           </div>
+//         </body>
+//         </html>
+//       `,
+//       text: `KOSO Application - Your Account Credentials (Resent)
+
+// Hello ${name},
+
+// We are resending your account credentials as requested.
+
+// ⚠️ SECURITY ALERT: This email contains your login credentials. Please keep them secure.
+
+// Your Login Credentials:
+// Email: ${toEmail}
+// Password: ${password}
+
+// Important Security Notes:
+// - This is your current password - we recommend changing it after login
+// - Never share your credentials with anyone
+// - Enable two-factor authentication for additional security
+// - This email was sent at your request
+
+// Login URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}
+
+// If you didn't request these credentials, please contact our support team immediately.
+
+// Requested on: ${new Date().toLocaleString()}
+
+// © ${new Date().getFullYear()} KOSO Application. All rights reserved.`
+//     };
+
+//     console.log(`📨 Resending email from: ${mailOptions.from}`);
+//     console.log(`📨 Resending email to: ${mailOptions.to}`);
+    
+//     // Send email
+//     const info = await transporter.sendMail(mailOptions);
+//     console.log(`✅ Credentials resent successfully to ${toEmail}`);
+//     console.log(`📫 Message ID: ${info.messageId}`);
+//     return true;
+    
+//   } catch (error) {
+//     console.error(`❌ Error resending email to ${toEmail}:`, error.message);
+//     return false;
+//   }
+// };
+
 const resendCredentialsEmail = async (toEmail, name, password) => {
   try {
     console.log(`📤 Preparing to resend credentials email to: ${toEmail}`);
@@ -401,24 +547,33 @@ const resendCredentialsEmail = async (toEmail, name, password) => {
       return false;
     }
 
+    // Check if transporter is properly configured
+    if (!transporter) {
+      console.error("❌ Email transporter not initialized");
+      return false;
+    }
+
     // Path to your logo image
     const logoPath = path.join(__dirname, '../assets/images/koso-logo.png');
     
-    // Read the image file
-    const logoBuffer = fs.readFileSync(logoPath);
+    // Check if logo exists
+    let attachments = [];
+    if (fs.existsSync(logoPath)) {
+      const logoBuffer = fs.readFileSync(logoPath);
+      attachments = [{
+        filename: 'logo.png',
+        content: logoBuffer,
+        cid: 'companylogo'
+      }];
+    } else {
+      console.log("⚠️ Logo not found at:", logoPath);
+    }
 
-    // Email content with CID reference
     const mailOptions = {
       from: `"KOSO Application" <${process.env.SMTP_USER || 'companytest128@gmail.com'}>`,
       to: toEmail,
       subject: 'KOSO Application - Your Account Credentials (Resent)',
-      attachments: [
-        {
-          filename: 'logo.png',
-          content: logoBuffer,
-          cid: 'companylogo' // Same CID used in img src
-        }
-      ],
+      attachments: attachments,
       html: `
         <!DOCTYPE html>
         <html>
@@ -432,21 +587,18 @@ const resendCredentialsEmail = async (toEmail, name, password) => {
             .header h1 { margin: 10px 0 5px; font-size: 28px; }
             .header p { margin: 0; opacity: 0.9; }
             .content { padding: 30px 20px; background: #ffffff; }
-            .credentials { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #FF4D57; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-            .btn { display: inline-block; padding: 12px 30px; background: #FF4D57; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; font-weight: bold; }
-            .btn:hover { background: #e0444d; }
-            .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px; text-align: center; }
+            .credentials { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #FF4D57; margin: 20px 0; }
             .highlight { color: #FF4D57; font-weight: bold; font-size: 16px; }
             .warning { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 8px; margin: 20px 0; }
             .security-box { background: #e8f4fd; border: 1px solid #b8e1ff; padding: 15px; border-radius: 8px; margin-top: 20px; }
+            .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px; text-align: center; }
           </style>
         </head>
         <body>
           <div class="container">
             <div class="header">
               <div class="logo-container">
-                <!-- Image referenced by CID -->
-                <img src="cid:companylogo" alt="KOSO Application Logo" class="logo" />
+                ${attachments.length > 0 ? '<img src="cid:companylogo" alt="KOSO Application Logo" class="logo" />' : '<h1 style="color: white; margin:0;">KOSO</h1>'}
               </div>
               <h1>KOSO Application</h1>
               <p>Your Account Credentials (Resent)</p>
@@ -457,48 +609,33 @@ const resendCredentialsEmail = async (toEmail, name, password) => {
               <p style="font-size: 16px;">We are resending your account credentials as requested.</p>
               
               <div class="warning">
-                <p><strong>⚠️ Security Alert:</strong> This email contains your login credentials. Please keep them secure and do not share them with anyone.</p>
+                <p><strong>⚠️ Security Alert:</strong> This email contains your login credentials. Please keep them secure.</p>
               </div>
               
               <div class="credentials">
                 <h3 style="margin-top: 0; color: #FF4D57;">🔐 Your Login Credentials</h3>
                 <table style="width: 100%; border-collapse: collapse;">
-                  <tr>
-                    <td style="padding: 10px 0; width: 100px;"><strong>Email:</strong></td>
-                    <td style="padding: 10px 0;"><span class="highlight">${toEmail}</span></td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 10px 0;"><strong>Password:</strong></td>
-                    <td style="padding: 10px 0;"><span class="highlight">${password}</span></td>
-                  </tr>
-                </table>
+                  <tr><td style="padding: 10px 0;"><strong>Email:</strong></td><td><span class="highlight">${toEmail}</span></td> </tr>
+                  <tr><td style="padding: 10px 0;"><strong>Password:</strong></td><td><span class="highlight">${password}</span></td> </tr>
+                 </table>
               </div>
               
               <div class="security-box">
-                <h4 style="margin-top: 0; color: #0066cc;">📋 Important Security Notes:</h4>
+                <h4>📋 Important Security Notes:</h4>
                 <ul>
-                 
                   <li>Never share your credentials with anyone</li>
-                  <li>Enable two-factor authentication for additional security</li>
+                  <li>Change your password after first login</li>
                   <li>This email was sent at your request on ${new Date().toLocaleString()}</li>
                 </ul>
               </div>
               
-              <div style="text-align: center;">
-                <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}" class="btn">
-                  🔑 Login to Your Account
-                </a>
-              </div>
-              
-              <p style="margin-top: 25px; font-size: 14px; color: #666; text-align: center;">
-                If you didn't request these credentials, please contact our support team immediately.
+              <p style="margin-top: 25px; text-align: center;">
+                Login at: ${process.env.FRONTEND_URL || 'http://localhost:5173'}
               </p>
             </div>
             
             <div class="footer">
-              <p><strong>Requested on:</strong> ${new Date().toLocaleString()}</p>
               <p>&copy; ${new Date().getFullYear()} KOSO Application. All rights reserved.</p>
-              <p style="margin-top: 10px; font-size: 11px;">This is an automated message, please do not reply to this email.</p>
             </div>
           </div>
         </body>
@@ -510,38 +647,48 @@ Hello ${name},
 
 We are resending your account credentials as requested.
 
-⚠️ SECURITY ALERT: This email contains your login credentials. Please keep them secure.
+⚠️ SECURITY ALERT: This email contains your login credentials.
 
 Your Login Credentials:
 Email: ${toEmail}
 Password: ${password}
 
 Important Security Notes:
-- This is your current password - we recommend changing it after login
 - Never share your credentials with anyone
-- Enable two-factor authentication for additional security
+- Change your password after first login
 - This email was sent at your request
 
 Login URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}
 
-If you didn't request these credentials, please contact our support team immediately.
-
-Requested on: ${new Date().toLocaleString()}
-
 © ${new Date().getFullYear()} KOSO Application. All rights reserved.`
     };
 
-    console.log(`📨 Resending email from: ${mailOptions.from}`);
-    console.log(`📨 Resending email to: ${mailOptions.to}`);
+    console.log(`📨 Attempting to send email to: ${toEmail}`);
+    console.log(`📨 Using SMTP: ${process.env.SMTP_HOST}:${process.env.SMTP_PORT}`);
     
-    // Send email
+    // Send email with better error handling
     const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ Credentials resent successfully to ${toEmail}`);
+    console.log(`✅ Email sent successfully to ${toEmail}`);
     console.log(`📫 Message ID: ${info.messageId}`);
     return true;
     
   } catch (error) {
-    console.error(`❌ Error resending email to ${toEmail}:`, error.message);
+    console.error(`❌ Error sending email to ${toEmail}:`, error);
+    console.error(`❌ Error code: ${error.code}`);
+    console.error(`❌ Error command: ${error.command}`);
+    console.error(`❌ Error response: ${error.response}`);
+    
+    // Log specific error types
+    if (error.code === 'EAUTH') {
+      console.error('🔐 Authentication failed - Check SMTP_USER and SMTP_PASS');
+      console.error('   Make sure you are using a valid Gmail App Password');
+    } else if (error.code === 'ESOCKET') {
+      console.error('🌐 Connection failed - Server may be blocking SMTP ports');
+      console.error('   Try using port 465 with secure: true');
+    } else if (error.code === 'ECONNREFUSED') {
+      console.error('🔌 Connection refused - SMTP server may be down or blocked');
+    }
+    
     return false;
   }
 };
