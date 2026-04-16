@@ -23,7 +23,7 @@ const PowerStation = {
   },
 
   // Create new power station
-  create: (data, callback) => {
+ create: (data, callback) => {
   const sql = `
     INSERT INTO plant_data (
       power_station_name, 
@@ -53,6 +53,7 @@ const PowerStation = {
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
+  // IMPORTANT: Order must match exactly with the columns above
   db.query(sql, [
     data.power_station_name,
     data.pipe_dia_d2,
@@ -71,7 +72,7 @@ const PowerStation = {
     data.t_mix,
     data.plant_type,
     data.critical_type,
-    data.plant_mcr,
+    data.plant_mcr,        // ← Make sure this is at position 18
     data.heat_rate_value,
     data.heat_rate_unit,
     data.production_cost,
