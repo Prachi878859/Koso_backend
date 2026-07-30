@@ -57,135 +57,278 @@ const powerStationController = {
     });
   },
 
-  // Create New Power Station
-  createPowerStation: (req, res) => {
-    try {
-      const {
-  power_station_name,
-  pipe_dia_d2,
-  pipe_dia_unit,
-  t2p,
-  p1,
-  p1_unit,
-  t1,
-  t1_unit,
-  p2,
-  tcrh,
-  w_crh,
-  w_crh_unit,
-  tw,
-  ww,
-  t_mix,
-  plant_type,
-  critical_type,
-  plant_mcr,
-  heat_rate_value,
-  heat_rate_unit,
-  production_cost,
-  production_cost_currency,
-  custom_currency,
-  sell_price_per_mwh
-} = req.body;
+//   // Create New Power Station
+//   createPowerStation: (req, res) => {
+//     try {
+//       const {
+//   power_station_name,
+//   pipe_dia_d2,
+//   pipe_dia_unit,
+//   t2p,
+//   p1,
+//   p1_unit,
+//   t1,
+//   t1_unit,
+//   p2,
+//   tcrh,
+//   w_crh,
+//   w_crh_unit,
+//   tw,
+//   ww,
+//   t_mix,
+//   plant_type,
+//   critical_type,
+//   plant_mcr,
+//   heat_rate_value,
+//   heat_rate_unit,
+//   production_cost,
+//   production_cost_currency,
+//   custom_currency,
+//   sell_price_per_mwh
+// } = req.body;
 
-console.log("BODY =>", req.body);
+// console.log("BODY =>", req.body);
 
-      // Validate required fields
-      if (!power_station_name) {
-        return res.status(400).json({
+//       // Validate required fields
+//       if (!power_station_name) {
+//         return res.status(400).json({
+//           success: false,
+//           message: "Power station name is required"
+//         });
+//       }
+
+//       // Check if power station name already exists
+//       PowerStation.nameExists(power_station_name, null, (existsError, existsResults) => {
+//         if (existsError) {
+//           return res.status(500).json({
+//             success: false,
+//             message: "Database error",
+//             error: existsError.message
+//           });
+//         }
+
+//         if (existsResults[0].count > 0) {
+//           return res.status(400).json({
+//             success: false,
+//             message: "Power station name already exists"
+//           });
+//         }
+
+//         // Prepare data object
+//         const powerStationData = {
+//           power_station_name: power_station_name.trim(),
+//           pipe_dia_d2: pipe_dia_d2 || null,
+//           pipe_dia_unit: pipe_dia_unit || null,
+//           t2p: t2p || null,
+//           plant_type: plant_type || null,
+//           critical_type: critical_type || null,
+//           plant_mcr: plant_mcr || null,
+//           heat_rate_value: heat_rate_value || null,
+//           heat_rate_unit: heat_rate_unit || null,
+//           production_cost: production_cost || null,
+//           production_cost_currency: production_cost_currency || null,
+//           custom_currency: custom_currency || null,
+//           sell_price_per_mwh: sell_price_per_mwh || null,
+//           p1: p1 || null,
+// p1_unit: p1_unit || null,
+// t1: t1 || null,
+// t1_unit: t1_unit || null,
+// p2: p2 || null,
+// tcrh: tcrh || null,
+// w_crh: w_crh || null,
+// w_crh_unit: w_crh_unit || null,
+// tw: tw || null,
+// ww: ww || null,
+// t_mix: t_mix || null,
+//         };
+
+//         // Create new power station
+//         PowerStation.create(powerStationData, (createError, results) => {
+//           if (createError) {
+//             console.error("Power station creation error:", createError);
+//             return res.status(500).json({
+//               success: false,
+//               message: "Error creating power station",
+//               error: createError.message
+//             });
+//           }
+
+//           console.log(`✅ Power station created successfully with ID: ${results.insertId}`);
+
+//           // Fetch the newly created record
+//           PowerStation.findById(results.insertId, (fetchError, fetchResults) => {
+//             if (fetchError) {
+//               return res.status(201).json({
+//                 success: true,
+//                 message: "Power station created successfully",
+//                 data: {
+//                   id: results.insertId,
+//                   ...powerStationData
+//                 }
+//               });
+//             }
+
+//             return res.status(201).json({
+//               success: true,
+//               message: "Power station created successfully",
+//               data: fetchResults[0]
+//             });
+//           });
+//         });
+//       });
+//     } catch (error) {
+//       console.error("Server error in createPowerStation:", error);
+//       return res.status(500).json({
+//         success: false,
+//         message: "Server error",
+//         error: error.message
+//       });
+//     }
+//   },
+
+createPowerStation: (req, res) => {
+  try {
+    const {
+      power_station_name,
+      pipe_dia_d2,
+      pipe_dia_unit,
+      t2p,
+      p1,
+      p1_unit,
+      t1,
+      t1_unit,
+      p2,
+      tcrh,
+      w_crh,
+      w_crh_unit,
+      tw,
+      ww,
+      t_mix,
+      plant_type,
+      critical_type,
+      plant_mcr,
+      plant_mw_load,
+      plant_capacity_factor,
+      heat_rate_value,
+      heat_rate_unit,
+      production_cost,
+      production_cost_currency,
+      custom_currency,
+      sell_price_per_mwh,
+      p1fl,
+      p1fl_unit,
+      t1fl,
+      t1fl_unit,
+      tcrhfl,
+      tcrhfl_unit
+    } = req.body;
+
+    console.log("BODY =>", req.body);
+
+    // Validate required fields
+    if (!power_station_name) {
+      return res.status(400).json({
+        success: false,
+        message: "Power station name is required"
+      });
+    }
+
+    // Check if power station name already exists
+    PowerStation.nameExists(power_station_name, null, (existsError, existsResults) => {
+      if (existsError) {
+        return res.status(500).json({
           success: false,
-          message: "Power station name is required"
+          message: "Database error",
+          error: existsError.message
         });
       }
 
-      // Check if power station name already exists
-      PowerStation.nameExists(power_station_name, null, (existsError, existsResults) => {
-        if (existsError) {
+      if (existsResults[0].count > 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Power station name already exists"
+        });
+      }
+
+      // Prepare data object with all fields
+      const powerStationData = {
+        power_station_name: power_station_name.trim(),
+        pipe_dia_d2: pipe_dia_d2 || null,
+        pipe_dia_unit: pipe_dia_unit || null,
+        t2p: t2p || null,
+        p1: p1 || null,
+        p1_unit: p1_unit || null,
+        t1: t1 || null,
+        t1_unit: t1_unit || null,
+        p2: p2 || null,
+        tcrh: tcrh || null,
+        w_crh: w_crh || null,
+        w_crh_unit: w_crh_unit || null,
+        tw: tw || null,
+        ww: ww || null,
+        t_mix: t_mix || null,
+        plant_type: plant_type || null,
+        critical_type: critical_type || null,
+        plant_mcr: plant_mcr || null,
+        plant_mw_load: plant_mw_load || null,
+        plant_capacity_factor: plant_capacity_factor || null,
+        heat_rate_value: heat_rate_value || null,
+        heat_rate_unit: heat_rate_unit || null,
+        production_cost: production_cost || null,
+        production_cost_currency: production_cost_currency || null,
+        custom_currency: custom_currency || null,
+        sell_price_per_mwh: sell_price_per_mwh || null,
+        p1fl: p1fl || null,
+        p1fl_unit: p1fl_unit || null,
+        t1fl: t1fl || null,
+        t1fl_unit: t1fl_unit || null,
+        tcrhfl: tcrhfl || null,
+        tcrhfl_unit: tcrhfl_unit || null
+      };
+
+      // Create new power station
+      PowerStation.create(powerStationData, (createError, results) => {
+        if (createError) {
+          console.error("Power station creation error:", createError);
           return res.status(500).json({
             success: false,
-            message: "Database error",
-            error: existsError.message
+            message: "Error creating power station",
+            error: createError.message
           });
         }
 
-        if (existsResults[0].count > 0) {
-          return res.status(400).json({
-            success: false,
-            message: "Power station name already exists"
-          });
-        }
+        console.log(`✅ Power station created successfully with ID: ${results.insertId}`);
 
-        // Prepare data object
-        const powerStationData = {
-          power_station_name: power_station_name.trim(),
-          pipe_dia_d2: pipe_dia_d2 || null,
-          pipe_dia_unit: pipe_dia_unit || null,
-          t2p: t2p || null,
-          plant_type: plant_type || null,
-          critical_type: critical_type || null,
-          plant_mcr: plant_mcr || null,
-          heat_rate_value: heat_rate_value || null,
-          heat_rate_unit: heat_rate_unit || null,
-          production_cost: production_cost || null,
-          production_cost_currency: production_cost_currency || null,
-          custom_currency: custom_currency || null,
-          sell_price_per_mwh: sell_price_per_mwh || null,
-          p1: p1 || null,
-p1_unit: p1_unit || null,
-t1: t1 || null,
-t1_unit: t1_unit || null,
-p2: p2 || null,
-tcrh: tcrh || null,
-w_crh: w_crh || null,
-w_crh_unit: w_crh_unit || null,
-tw: tw || null,
-ww: ww || null,
-t_mix: t_mix || null,
-        };
-
-        // Create new power station
-        PowerStation.create(powerStationData, (createError, results) => {
-          if (createError) {
-            console.error("Power station creation error:", createError);
-            return res.status(500).json({
-              success: false,
-              message: "Error creating power station",
-              error: createError.message
-            });
-          }
-
-          console.log(`✅ Power station created successfully with ID: ${results.insertId}`);
-
-          // Fetch the newly created record
-          PowerStation.findById(results.insertId, (fetchError, fetchResults) => {
-            if (fetchError) {
-              return res.status(201).json({
-                success: true,
-                message: "Power station created successfully",
-                data: {
-                  id: results.insertId,
-                  ...powerStationData
-                }
-              });
-            }
-
+        // Fetch the newly created record
+        PowerStation.findById(results.insertId, (fetchError, fetchResults) => {
+          if (fetchError) {
             return res.status(201).json({
               success: true,
               message: "Power station created successfully",
-              data: fetchResults[0]
+              data: {
+                id: results.insertId,
+                ...powerStationData
+              }
             });
+          }
+
+          return res.status(201).json({
+            success: true,
+            message: "Power station created successfully",
+            data: fetchResults[0]
           });
         });
       });
-    } catch (error) {
-      console.error("Server error in createPowerStation:", error);
-      return res.status(500).json({
-        success: false,
-        message: "Server error",
-        error: error.message
-      });
-    }
-  },
-
+    });
+  } catch (error) {
+    console.error("Server error in createPowerStation:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message
+    });
+  }
+},
   // Update Power Station
   updatePowerStation: (req, res) => {
     try {
@@ -609,10 +752,4 @@ t_mix: t_mix || null,
   }
 },
 };
-
-
-
-
-
-
 module.exports = powerStationController;
