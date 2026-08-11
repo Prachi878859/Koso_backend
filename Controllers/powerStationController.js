@@ -217,6 +217,7 @@ createPowerStation: (req, res) => {
       sell_price_per_mwh,
       p1fl,
       p1fl_unit,
+      p2fl,           // ← हे add करा
       t1fl,
       t1fl_unit,
       tcrhfl,
@@ -225,7 +226,6 @@ createPowerStation: (req, res) => {
 
     console.log("BODY =>", req.body);
 
-    // Validate required fields
     if (!power_station_name) {
       return res.status(400).json({
         success: false,
@@ -233,7 +233,6 @@ createPowerStation: (req, res) => {
       });
     }
 
-    // Check if power station name already exists
     PowerStation.nameExists(power_station_name, null, (existsError, existsResults) => {
       if (existsError) {
         return res.status(500).json({
@@ -250,7 +249,6 @@ createPowerStation: (req, res) => {
         });
       }
 
-      // Prepare data object with all fields
       const powerStationData = {
         power_station_name: power_station_name.trim(),
         pipe_dia_d2: pipe_dia_d2 || null,
@@ -280,13 +278,13 @@ createPowerStation: (req, res) => {
         sell_price_per_mwh: sell_price_per_mwh || null,
         p1fl: p1fl || null,
         p1fl_unit: p1fl_unit || null,
+        p2fl: p2fl || null,        // ← हे add करा
         t1fl: t1fl || null,
         t1fl_unit: t1fl_unit || null,
         tcrhfl: tcrhfl || null,
         tcrhfl_unit: tcrhfl_unit || null
       };
 
-      // Create new power station
       PowerStation.create(powerStationData, (createError, results) => {
         if (createError) {
           console.error("Power station creation error:", createError);
@@ -299,7 +297,6 @@ createPowerStation: (req, res) => {
 
         console.log(`✅ Power station created successfully with ID: ${results.insertId}`);
 
-        // Fetch the newly created record
         PowerStation.findById(results.insertId, (fetchError, fetchResults) => {
           if (fetchError) {
             return res.status(201).json({
