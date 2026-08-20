@@ -218,9 +218,7 @@ const PowerStation = {
     db.query(sql, [name], callback);
   },
 
-  // Create new power station
- // Create method मध्ये
-create: (data, callback) => {
+ create: (data, callback) => {
   const sql = `
     INSERT INTO plant_data (
       power_station_name,
@@ -255,46 +253,83 @@ create: (data, callback) => {
       tcrhfl,
       tcrhfl_unit,
       plant_mw_load,
-      plant_capacity_factor
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      plant_capacity_factor,
+      wcorr,
+      mwloss,
+      wcorrfl,
+      mwlossfl,
+      d_hr,
+      ploss,
+      rloss,
+      pcost
+    ) VALUES (
+      ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+      ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+      ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+      ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+      ?
+    )
   `;
 
   db.query(sql, [
+    // 1-4
     data.power_station_name,
     data.pipe_dia_d2,
     data.pipe_dia_unit,
     data.t2p,
+
+    // 5-10
     data.p1,
     data.p1_unit,
     data.t1,
     data.t1_unit,
     data.p2,
     data.tcrh,
+
+    // 11-16
     data.w_crh,
     data.w_crh_unit,
     data.tw,
     data.ww,
     data.t_mix,
     data.plant_type,
+
+    // 17-22
     data.critical_type,
     data.plant_mcr,
     data.heat_rate_value,
     data.heat_rate_unit,
     data.production_cost,
     data.production_cost_currency,
+
+    // 23-28
     data.custom_currency,
     data.sell_price_per_mwh,
     data.p1fl,
     data.p1fl_unit,
-    data.p2fl,        // ← हे आहे
+    data.p2fl,
     data.t1fl,
+
+    // 29-34
     data.t1fl_unit,
     data.tcrhfl,
     data.tcrhfl_unit,
     data.plant_mw_load,
-    data.plant_capacity_factor
+    data.plant_capacity_factor,
+    data.wcorr ?? null,
+
+    // 35-41
+    data.mwloss ?? null,
+    data.wcorrfl ?? null,
+    data.mwlossfl ?? null,
+    data.d_hr ?? null,
+    data.ploss ?? null,
+    data.rloss ?? null,
+    data.pcost ?? null
+
   ], callback);
 },
+
 
   // Update power station
   update: (id, data, callback) => {

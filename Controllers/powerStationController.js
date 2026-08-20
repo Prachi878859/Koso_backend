@@ -5,7 +5,7 @@ const powerStationController = {
   // Get All Power Stations
   getAllPowerStations: (req, res) => {
     PowerStation.findAll((error, results) => {
-      if (error) {
+      if (error)  {
         return res.status(500).json({
           success: false,
           message: "Error fetching power stations",
@@ -202,7 +202,7 @@ createPowerStation: (req, res) => {
       w_crh,
       w_crh_unit,
       tw,
-      ww,
+      ww,  // ← THIS WAS MISSING - ADD THIS LINE
       t_mix,
       plant_type,
       critical_type,
@@ -217,14 +217,35 @@ createPowerStation: (req, res) => {
       sell_price_per_mwh,
       p1fl,
       p1fl_unit,
-      p2fl,           // ← हे add करा
+      p2fl,
       t1fl,
       t1fl_unit,
       tcrhfl,
-      tcrhfl_unit
+      tcrhfl_unit,
+      // Calculated fields from frontend
+      leak_rate_test,      // Wcorr
+      mw_loss_test,        // MWLOSS
+      leak_rate_mcr,       // WcorrFL
+      mw_loss_mcr,         // MWLOSSFL
+      heat_rate_penalty,   // D-HR
+      production_loss,     // PLOSS
+      revenue_loss,        // RLOSS
+      production_cost_wasted // PCOST
     } = req.body;
 
-    console.log("BODY =>", req.body);
+    console.log("========== CALCULATED VALUES ==========");
+    console.log("leak_rate_test:", leak_rate_test);
+    console.log("mw_loss_test:", mw_loss_test);
+    console.log("leak_rate_mcr:", leak_rate_mcr);
+    console.log("mw_loss_mcr:", mw_loss_mcr);
+    console.log("heat_rate_penalty:", heat_rate_penalty);
+    console.log("production_loss:", production_loss);
+    console.log("revenue_loss:", revenue_loss);
+    console.log("production_cost_wasted:", production_cost_wasted);
+    console.log("ww value received:", ww); // Add this log to verify
+    console.log("========================================");
+
+    console.log("FULL BODY =>", JSON.stringify(req.body, null, 2));
 
     if (!power_station_name) {
       return res.status(400).json({
@@ -263,7 +284,7 @@ createPowerStation: (req, res) => {
         w_crh: w_crh || null,
         w_crh_unit: w_crh_unit || null,
         tw: tw || null,
-        ww: ww || null,
+        ww: ww !== undefined && ww !== null ? ww : null, // ← ADD THIS - properly handle ww
         t_mix: t_mix || null,
         plant_type: plant_type || null,
         critical_type: critical_type || null,
@@ -278,12 +299,24 @@ createPowerStation: (req, res) => {
         sell_price_per_mwh: sell_price_per_mwh || null,
         p1fl: p1fl || null,
         p1fl_unit: p1fl_unit || null,
-        p2fl: p2fl || null,        // ← हे add करा
+        p2fl: p2fl || null,
         t1fl: t1fl || null,
         t1fl_unit: t1fl_unit || null,
         tcrhfl: tcrhfl || null,
-        tcrhfl_unit: tcrhfl_unit || null
+        tcrhfl_unit: tcrhfl_unit || null,
+        // Calculated fields
+        wcorr: leak_rate_test ?? null,
+        mwloss: mw_loss_test ?? null,
+        wcorrfl: leak_rate_mcr ?? null,
+        mwlossfl: mw_loss_mcr ?? null,
+        d_hr: heat_rate_penalty ?? null,
+        ploss: production_loss ?? null,
+        rloss: revenue_loss ?? null,
+        pcost: production_cost_wasted ?? null
       };
+
+      // Log the ww value being saved
+      console.log("Saving ww value:", powerStationData.ww);
 
       PowerStation.create(powerStationData, (createError, results) => {
         if (createError) {
