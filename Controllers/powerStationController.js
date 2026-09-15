@@ -202,7 +202,7 @@ createPowerStation: (req, res) => {
       w_crh,
       w_crh_unit,
       tw,
-      ww,  // ← THIS WAS MISSING - ADD THIS LINE
+      ww,  
       t_mix,
       plant_type,
       critical_type,
@@ -222,7 +222,6 @@ createPowerStation: (req, res) => {
       t1fl_unit,
       tcrhfl,
       tcrhfl_unit,
-      // Calculated fields from frontend
       leak_rate_test,      // Wcorr
       mw_loss_test,        // MWLOSS
       leak_rate_mcr,       // WcorrFL
@@ -242,7 +241,7 @@ createPowerStation: (req, res) => {
     console.log("production_loss:", production_loss);
     console.log("revenue_loss:", revenue_loss);
     console.log("production_cost_wasted:", production_cost_wasted);
-    console.log("ww value received:", ww); // Add this log to verify
+    console.log("ww value received:", ww); 
     console.log("========================================");
 
     console.log("FULL BODY =>", JSON.stringify(req.body, null, 2));

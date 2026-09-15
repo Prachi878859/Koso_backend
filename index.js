@@ -13,6 +13,7 @@ const path = require('path');
 const adminRoutes = require('./routes/adminRoutes');
 const userRoutes = require('./routes/userRoutes');
 const powerStationRoutes = require('./routes/powerStationRoutes');
+const appRoutes = require('./routes/appRoutes');
 
 // Database connection
 const db = require('./config/db');
@@ -127,6 +128,9 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+//Expiry Date 
+app.use("/api/app", appRoutes);
 
 // Create default admin if doesn't exist (optional)
 const createDefaultAdmin = () => {
